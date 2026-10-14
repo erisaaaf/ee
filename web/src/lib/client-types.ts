@@ -1,0 +1,50 @@
+// Type-only imports of server response shapes (erased at build time — no server code reaches the browser).
+import type { dashboard, progressSeries } from "@/server/services/analytics";
+import type { dayDiary, DiaryEntry } from "@/server/services/diary";
+import type { FoodDTO, BarcodeLookup } from "@/server/services/food";
+import type { recipeWithNutrition, listRecipes } from "@/server/services/recipes";
+import type { getExercise, listExercises, getTemplate, listTemplates, getSession, listSessions, exerciseHistory, generateForUser } from "@/server/services/fitness";
+import type { listGoals } from "@/server/services/goals";
+import type { gamificationSummary, listChallenges } from "@/server/services/gamification";
+import type { listIntegrations } from "@/server/services/integrations";
+import type { dataInventory } from "@/server/services/privacy";
+import type { analyzeFoodPhoto, getMealPlan, generateRecipeIdeas, weeklyReview, dailyInsight } from "@/server/ai/features";
+import type { chat, getConversation } from "@/server/ai/chat";
+import type { globalSearch } from "@/server/services/search";
+import type { swapsForFood } from "@/server/services/swaps";
+
+type A<F extends (...args: never[]) => unknown> = Awaited<ReturnType<F>>;
+// Dates arrive as ISO strings over JSON.
+type Jsonify<T> = T extends Date ? string : T extends (infer U)[] ? Jsonify<U>[] : T extends object ? { [K in keyof T]: Jsonify<T[K]> } : T;
+
+export type Dashboard = Jsonify<A<typeof dashboard>>;
+export type Progress = Jsonify<A<typeof progressSeries>>;
+export type DayDiary = Jsonify<A<typeof dayDiary>>;
+export type Entry = Jsonify<DiaryEntry>;
+export type Food = Jsonify<FoodDTO>;
+export type Barcode = Jsonify<BarcodeLookup>;
+export type Recipe = Jsonify<A<typeof recipeWithNutrition>>;
+export type RecipeListItem = Jsonify<A<typeof listRecipes>[number]>;
+export type ExerciseDetail = Jsonify<A<typeof getExercise>>;
+export type ExerciseListItem = Jsonify<A<typeof listExercises>[number]>;
+export type Template = Jsonify<A<typeof getTemplate>>;
+export type TemplateListItem = Jsonify<A<typeof listTemplates>[number]>;
+export type Session = Jsonify<A<typeof getSession>>;
+export type SessionListItem = Jsonify<A<typeof listSessions>[number]>;
+export type ExerciseHistory = Jsonify<A<typeof exerciseHistory>>;
+export type GeneratedWorkout = Jsonify<A<typeof generateForUser>>;
+export type Goal = Jsonify<A<typeof listGoals>[number]>;
+export type Rewards = Jsonify<A<typeof gamificationSummary>>;
+export type Challenge = Jsonify<A<typeof listChallenges>[number]>;
+export type Integration = Jsonify<A<typeof listIntegrations>[number]>;
+export type InventoryItem = Jsonify<A<typeof dataInventory>[number]>;
+export type PhotoAnalysis = Jsonify<A<typeof analyzeFoodPhoto>>;
+export type MealPlan = Jsonify<A<typeof getMealPlan>>;
+export type RecipeIdea = Jsonify<A<typeof generateRecipeIdeas>[number]>;
+export type WeeklyReview = Jsonify<A<typeof weeklyReview>>;
+export type DailyInsight = Jsonify<A<typeof dailyInsight>>;
+export type ChatResult = Jsonify<A<typeof chat>>;
+export type Conversation = Jsonify<A<typeof getConversation>>;
+export type SearchResult = Jsonify<A<typeof globalSearch>>;
+export type Swaps = Jsonify<A<typeof swapsForFood>>;
+export type AiStatus = { configured: boolean; enabledByUser: boolean; model: string | null; quota: { used: number; remaining: number; limit: number } };
